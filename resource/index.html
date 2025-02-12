@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Little helper navigation task manager</title>
+    <style>
+        #canvasContainer {
+            position: relative;
+            display: inline-block; /* Prevents it from stretching full width */
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        #mapCanvas {
+            position: relative; /* Make sure the background map stays at the bottom layer */
+            z-index: 1;
+        }
+
+        #lidarCanvas {
+            z-index: 2; /* Keep lidar and pose on top */
+        }
+        #poseCanvas {
+            z-index:3;
+        }
+        select { margin: 10px; padding: 5px; }
+    </style>
+</head>
+<body>
+    <h2>Click on the Map</h2>
+    <label for="pointType">Select Point Type:</label>
+    <select id="pointType">
+        <option value="start">start</option>
+        <option value="collect">collect</option>
+        <option value="dropoff">dropoff</option>
+        <option value="end">end</option>
+        <option value="estimate_position">estimate position</option>
+        <option value="estimate_direction">estimate direction</option>
+    </select>
+    <p>
+      <button onclick="onInitiateClick()">initiate navigation</button>
+      <button onclick="onPlanPathClick()">plan path</button>
+    </p>
+    <div id="canvasContainer">
+      <canvas id="mapCanvas"></canvas>  <!-- Static Background -->
+      <canvas id="lidarCanvas"></canvas>  <!-- LiDAR Data -->
+      <canvas id="poseCanvas"></canvas>  <!-- Robot & Estimated Position -->
+    </div>
+    <p>Last Click: <span id="coordinates">None</span></p><br />
+    <p>genrated path status: <span id="path_status">no path yet</span></p>
+    <p>Robot coordinates: <span id="position_x"> nan </span>, <span id="position_y"> nan </span> </p>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
