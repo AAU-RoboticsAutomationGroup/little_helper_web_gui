@@ -79,6 +79,7 @@ class Webui(Node):
         self.create_subscription(Path, "plan", callback=self.recived_path_callback, qos_profile= 10) 
         self.create_subscription(OccupancyGrid, "global_costmap/costmap", self.costmap_callback, 10)
         self.cmap_origin = [0, 0]
+        self.cmap_height = 1
 
         self.lidar_points = []
         self.create_subscription(LaserScan, "scan", self.lidar_callback, 10)
