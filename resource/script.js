@@ -5,7 +5,7 @@ const map_ctx = map_canvas.getContext("2d");
 const lidar_ctx = lidar_canvas.getContext("2d");
 const pose_ctx = pose_canvas.getContext("2d");
 
-const socket = io("http://127.0.0.1:5000"); // Connect to WebSocket server
+const socket = io("http://172.17.100.219:5000"); // Connect to WebSocket server
 
 const SCALE = 0.05; // Each pixel = 5cm → 0.05m
 let points = []; // Store clicked points

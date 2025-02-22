@@ -89,6 +89,9 @@ class Webui(Node):
         self.create_subscription(OccupancyGrid, "global_costmap/costmap", self.costmap_callback, 10)
         self.cmap_origin = [0, 0]
         self.cmap_height = 1
+        self.cmap_width = 1
+        self.cmap_resolution = 1 
+        
 
         self.lidar_points = []
         self.create_subscription(LaserScan, "scan", self.lidar_callback, 10)
@@ -176,6 +179,7 @@ class Webui(Node):
     def publish_init(self):
         msg = Bool()
         msg.data = True
+        self.get_logger().info("sending navigation init signal")
         self.initialize_nav_publisher.publish(msg)
 
     def publish_estimated_pose(self, center_position, direction_position):
