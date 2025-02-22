@@ -30,7 +30,7 @@ def generate_launch_description():
 
     declare_map_file_argument = DeclareLaunchArgument(
         'map',
-        default_value=os.path.join(mir_nav_dir, 'maps', 'workspace1_map.yaml'),
+        default_value=os.path.join(mir_nav_dir, 'maps', 'test_map_1.yaml'),
         description='Relative path to map in mir_navigation/maps or full path to map (yaml).',
     )
     
@@ -46,7 +46,7 @@ def generate_launch_description():
     
 
     ld.add_action(declare_map_file_argument)
-    ld.add_action(OpaqueFunction(function=find_map_file))
+    # ld.add_action(OpaqueFunction(function=find_map_file))
     ld.add_action(webui)    
     
     return ld

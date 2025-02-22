@@ -19,7 +19,7 @@ import ast
 # ROS2 Node Initialization
 import os
 import shutil
-
+import cv2   
 
 
 global planned_path
@@ -29,20 +29,20 @@ global webui_waypoints
 webui_waypoints = []
 
 
-global map_path
-map_path = "/home/a/work/test_map1.png"
-
-path_to_map_yml = "/home/a/work/test_map_1.yaml"
-with open(path_to_map_yml) as stream:
-    try:
-        map_data = yaml.safe_load(stream)
-    except yaml.YAMLError as exc:
-        print(exc)
+# global map_path
+# map_path = "/home/a/work/test_map1.png"
+#
+# path_to_map_yml = "/home/a/work/test_map_1.yaml"
+# with open(path_to_map_yml) as stream:
+#     try:
+#         map_data = yaml.safe_load(stream)
+#     except yaml.YAMLError as exc:
+#         print(exc)
 
 from ament_index_python.packages import get_package_share_directory
 self_share_dir = get_package_share_directory('grasping_navigator_web_ui')
 
-path_to_image = path_to_map_yml.replace("yaml","png")
+# path_to_image = path_to_map_yml.replace("yaml","png")
 
 
 
@@ -61,10 +61,15 @@ class Webui(Node):
             map_data = yaml.safe_load(map_description)
         self.get_logger().info(f"map data: {map_data}") 
         map_image_name = map_data['image']
-    
-        map_dir = os.path.dirname(map_path)
 
-        shutil.copyfile(os.path.join(map_dir, map_image_name), os.path.join(self_share_dir,"data","map.png"))
+        map_dir = os.path.dirname(map_path)
+        if map_image_name.split(".")[-1] == "pgm":
+            map_tmp = cv2.imread(os.path.join(map_dir, map_image_name))
+            cv2.imwrite(os.path.join(self_share_dir, "data", "map.png"), map_tmp)
+        elif map_image_name.split(".")[-1] == "pgm": 
+            shutil.copyfile(os.path.join(map_dir, map_image_name), os.path.join(self_share_dir,"data","map.png"))
+        else:
+            raise Exception(f"The map file type ({map_image_name.split('.')[-1]}) is not supported please use .pgm or .png")
     
 
         self.tf_buffer = tf2_ros.Buffer() 
@@ -329,7 +334,7 @@ def run_flask_app():
         ros2_node.publish_estimated_pose(position, orientation)
 
 
-    socketio.run(app, debug=True, use_reloader=False, allow_unsafe_werkzeug=True)
+    socketio.run(app, debug=True, use_reloader=False, allow_unsafe_werkzeug=True, host="0.0.0.0")
 
 
 def main(args=None):
