@@ -31,7 +31,7 @@
     </style>
 </head>
 <body>
-    <h2>Click on the Map</h2>
+    <h2>Little Helper web ui</h2>
     <label for="pointType">Select Point Type:</label>
     <select id="pointType">
         <option value="start">start</option>
@@ -53,6 +53,7 @@
     <p>Last Click: <span id="coordinates">None</span></p><br />
     <p>genrated path status: <span id="path_status">no path yet</span></p>
     <p>Robot coordinates: <span id="position_x"> nan </span>, <span id="position_y"> nan </span> </p>
+    <p>Trigger for grasping path <span id="grasping_path_trigger"> nan </span> Grasping path index <span id="grasping_path_index"> nan </span> </p>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
     <script src="script.js"></script>
 </body>

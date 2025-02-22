@@ -180,9 +180,9 @@ socket.on("path_update", (data) => {
 })
 
 socket.on("position_update", (data) => {
-  document.getElementById("position_x").innerText = data.position.x
-  document.getElementById("position_y").innerText = data.position.y
-  drawRobotPose(data.position.x, data.position.y)
+  document.getElementById("position_x").innerText = data.position.x;
+  document.getElementById("position_y").innerText = data.position.y;
+  drawRobotPose(data.position.x, data.position.y);
 })
 socket.on("lidar_update", (data) => {
   // console.log("lidar recived", data.status);
@@ -190,4 +190,9 @@ socket.on("lidar_update", (data) => {
   //   console.log("point ", i, data.points[i]);
   // }
   drawLidar(data.points)
+})
+
+socket.on("grasping_path_status", (data) => {
+  document.getElementById("grasping_path_trigger").innerText = data.trigger;
+  document.getElementById("grasping_path_index").innerText = data.path_index; 
 })

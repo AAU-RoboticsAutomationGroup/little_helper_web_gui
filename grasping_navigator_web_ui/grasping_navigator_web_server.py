@@ -11,6 +11,8 @@ from threading import Thread
 from nav_msgs.msg import Path
 from nav_msgs.msg import OccupancyGrid  
 from sensor_msgs.msg import LaserScan 
+from lh_interfaces.msg import PathStatus
+
 import numpy as np
 import yaml
 import ast
@@ -85,8 +87,16 @@ class Webui(Node):
         self.create_subscription(LaserScan, "scan", self.lidar_callback, 10)
 
         self.estimated_pose_publisher = self.create_publisher(PoseWithCovarianceStamped, "initialpose", 10)
+
+        #navigation feedback 
+        self.create_subscription(PathStatus, "grasping_path_status", self.grasping_path_status_callback, 10)
        
-    
+    def grasping_path_status_callback(self, msg):
+        trigger = msg.trigger
+        path_index = msg.current_path_index
+        socketio.emit("grasping_path_status",{"trigger":trigger,"path_index":path_index})
+
+
 
     def get_robot_position_timer_callback(self):
         try:
