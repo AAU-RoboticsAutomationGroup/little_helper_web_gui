@@ -66,8 +66,10 @@ class Webui(Node):
         if map_image_name.split(".")[-1] == "pgm":
             map_tmp = cv2.imread(os.path.join(map_dir, map_image_name))
             cv2.imwrite(os.path.join(self_share_dir, "data", "map.png"), map_tmp)
+            self.get_logger().info(f"saved map converted from pgm at {os.path.join(self_share_dir, 'data', 'map.png')} ")
         elif map_image_name.split(".")[-1] == "pgm": 
             shutil.copyfile(os.path.join(map_dir, map_image_name), os.path.join(self_share_dir,"data","map.png"))
+            self.get_logger().info(f"saved map at {os.path.join(self_share_dir, 'data', 'map.png')} ")
         else:
             raise Exception(f"The map file type ({map_image_name.split('.')[-1]}) is not supported please use .pgm or .png")
     
