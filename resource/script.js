@@ -80,10 +80,10 @@ function drawPath() {
     // ctx.stroke();
 }
 
-function drawPlan(plan) {
+function drawPlan(plan, color) {
   console.log("plotting plan: ", plan)
   if (plan.length < 2) return;
-  map_ctx.strokeStyle = "green";
+  map_ctx.strokeStyle = color;
   map_ctx.beginPath();
   map_ctx.moveTo(plan[0][0]/SCALE, plan[0][1]/SCALE);
   for (let i = 1; i < plan.length; i++) {
@@ -176,7 +176,13 @@ pose_canvas.addEventListener("click", (event) => {
 socket.on("path_update", (data) => {
   console.log("Recived path: ", data.plan_array);
   document.getElementById("path_status").innerText = data.status
-  drawPlan(data.plan_array)
+  if (data.type == "full"){
+    drawPlan(data.plan_array, "green")
+  }
+  else {
+    drawPlan(data.plan_array, "red")
+  }
+
 })
 
 socket.on("position_update", (data) => {

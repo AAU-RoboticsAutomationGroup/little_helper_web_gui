@@ -79,13 +79,15 @@ class Webui(Node):
         self.tf_listener = tf2_ros.TransformListener(self.tf_buffer, self)
         self.parent_frame_id = "map"
         self.robot_base_frame_id = "base_link"
-        self.create_timer(0.5, self.get_robot_position_timer_callback)
+        self.create_timer(0.1, self.get_robot_position_timer_callback)
 
         self.path_publisher = self.create_publisher(String, 'webui_waypoints', 10)  # Topic for clicks
         self.initialize_nav_publisher = self.create_publisher(Bool, 'webui_move_trigger',10)
         self.get_logger().info("Flask/ROS2 Node Initialized")
         
         self.create_subscription(Path, "plan", callback=self.recived_path_callback, qos_profile= 10) 
+        self.create_subscription(Path, "grasping_path", callback=self.grasping_path_plan_callback, qos_profile = 10)
+
         self.create_subscription(OccupancyGrid, "global_costmap/costmap", self.costmap_callback, 10)
         self.cmap_origin = [0, 0]
         self.cmap_height = 1
@@ -106,7 +108,12 @@ class Webui(Node):
         path_index = msg.current_path_index
         socketio.emit("grasping_path_status",{"trigger":trigger,"path_index":path_index})
 
-
+    def grasping_path_plan_callback(self, msg):
+        self.get_logger().info("recived grasping path from planner")
+        self.get_logger().debug(f"{msg.poses}")
+        planned_path = self.ros_path_to_json(msg) 
+        self.get_logger().info(f"planned path {planned_path}")
+        socketio.emit("path_update", {"status":"plan recieved", "plan_array":planned_path, "type":"grasping"})
 
     def get_robot_position_timer_callback(self):
         try:
@@ -129,7 +136,7 @@ class Webui(Node):
         self.get_logger().debug(f"{msg.poses}")
         planned_path = self.ros_path_to_json(msg) 
         self.get_logger().info(f"planned path {planned_path}")
-        socketio.emit("path_update", {"status":"plan recieved", "plan_array":planned_path})
+        socketio.emit("path_update", {"status":"plan recieved", "plan_array":planned_path, "type":"full"})
 
     def costmap_callback(self, msg):
         """
