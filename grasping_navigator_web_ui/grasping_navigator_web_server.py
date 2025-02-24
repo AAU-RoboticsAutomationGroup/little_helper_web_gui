@@ -297,6 +297,9 @@ def run_flask_app():
     @app.route("/")
     def serve_html():
         return send_from_directory(os.path.join(self_share_dir, 'data'), "index.html")
+    @app.route("/ajax/libs/socket.io/4.5.4/socket.io.js")
+    def serve_socketio_js():
+        return send_from_directory(os.path.join(self_share_dir, 'data'), "socket.io.js")
 
     @app.route("/script.js")
     def serve_js():
