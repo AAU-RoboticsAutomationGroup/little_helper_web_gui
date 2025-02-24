@@ -350,7 +350,7 @@ def run_flask_app():
         ros2_node.publish_estimated_pose(position, orientation)
 
 
-    socketio.run(app, debug=True, use_reloader=False, allow_unsafe_werkzeug=True, host="0.0.0.0")
+    socketio.run(app, debug=True, use_reloader=False, allow_unsafe_werkzeug=True, host="192.168.12.18")
 
 
 def main(args=None):
