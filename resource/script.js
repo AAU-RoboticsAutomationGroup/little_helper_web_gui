@@ -202,3 +202,8 @@ socket.on("grasping_path_status", (data) => {
   document.getElementById("grasping_path_trigger").innerText = data.trigger;
   document.getElementById("grasping_path_index").innerText = data.path_index; 
 })
+
+socket.on("item_speed", (data) => {
+  document.getElementById("item_speed_dx").innerText = data.dx;
+  document.getElementById("item_speed_dy").innerText = data.dy;
+})
