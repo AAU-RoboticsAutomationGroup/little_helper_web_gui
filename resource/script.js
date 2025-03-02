@@ -36,6 +36,9 @@ function onPlanPathClick(){
 function onInitiateClick() {
   socket.emit("init_click")
 }
+function onClearCostmapClick() {
+  socket.emmit("clear_costmap")
+}
 
 
 function drawLidar(lidar_points) {
