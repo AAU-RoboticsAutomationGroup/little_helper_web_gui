@@ -92,7 +92,7 @@ class Webui(Node):
 
         self.create_subscription(OccupancyGrid, "global_costmap/costmap", self.costmap_callback, 10)
         self.cmap_origin = [0, 0]
-        self.client = self.create_client(Empty, '/global_costmap/clear_entirely_global_costmap')
+        self.client = self.create_client(ClearEntireCostmap, '/global_costmap/clear_entirely_global_costmap')
         self.cmap_height = 1
         self.cmap_width = 1
         self.cmap_resolution = 1 
@@ -112,6 +112,7 @@ class Webui(Node):
         self.clear_costmap_client = self.create_client(ClearEntireCostmap, '/global_costmap/clear_entirely_global_costmap')
 
     def clear_costmap(self):
+        self.get_logger().info("clear costmap request sent")
         req = ClearEntireCostmap()
         future = self.clear_costmap_client.call_async(req)
         future.add_done_callback(self.clear_costmap_response_callback)
