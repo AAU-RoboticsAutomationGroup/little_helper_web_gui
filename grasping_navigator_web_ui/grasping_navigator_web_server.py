@@ -113,7 +113,7 @@ class Webui(Node):
 
     def clear_costmap(self):
         self.get_logger().info("clear costmap request sent")
-        req = ClearEntireCostmap()
+        req = ClearEntireCostmap.Request()
         future = self.clear_costmap_client.call_async(req)
         future.add_done_callback(self.clear_costmap_response_callback)
 

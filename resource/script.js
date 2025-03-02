@@ -37,7 +37,7 @@ function onInitiateClick() {
   socket.emit("init_click")
 }
 function onClearCostmapClick() {
-  socket.emmit("clear_costmap")
+  socket.emit("clear_costmap")
 }
 
 
