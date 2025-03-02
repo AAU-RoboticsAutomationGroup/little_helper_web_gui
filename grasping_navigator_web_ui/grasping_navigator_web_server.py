@@ -12,7 +12,7 @@ from nav_msgs.msg import Path
 from nav_msgs.msg import OccupancyGrid  
 from sensor_msgs.msg import LaserScan 
 from lh_interfaces.msg import PathStatus
-
+from nav2_msgs.srv import ClearEntireCostmap
 from geometry_msgs.msg import TwistStamped 
 
 import numpy as np
@@ -92,6 +92,7 @@ class Webui(Node):
 
         self.create_subscription(OccupancyGrid, "global_costmap/costmap", self.costmap_callback, 10)
         self.cmap_origin = [0, 0]
+        self.client = self.create_client(ClearEntireCostmap, '/global_costmap/clear_entirely_global_costmap')
         self.cmap_height = 1
         self.cmap_width = 1
         self.cmap_resolution = 1 
@@ -106,6 +107,20 @@ class Webui(Node):
         self.create_subscription(PathStatus, "grasping_path_status", self.grasping_path_status_callback, 10)
       
         self.arm_base_vel_subscriber = self.create_subscription(TwistStamped, '/vel_arm_base', self.send_arm_vel_callback, 10)
+
+        # clear costmap client
+        self.clear_costmap_client = self.create_client(ClearEntireCostmap, '/global_costmap/clear_entirely_global_costmap')
+
+    def clear_costmap(self):
+        self.get_logger().info("clear costmap request sent")
+        req = ClearEntireCostmap.Request()
+        future = self.clear_costmap_client.call_async(req)
+        future.add_done_callback(self.clear_costmap_response_callback)
+
+    def clear_costmap_response_callback(self, future):
+        self.get_logger().info("costmap cleared")
+
+
     def send_arm_vel_callback(self, msg):
         dx = msg.twist.linear[0]
         dy = msg.twist.linear[1]
@@ -356,6 +371,10 @@ def run_flask_app():
         position = data['position']
         orientation = data['direction']
         ros2_node.publish_estimated_pose(position, orientation)
+
+    @socketio.on("clear_costmap")
+    def handle_clear_costmap():
+        ros2_node.clear_costmap()
 
 
     socketio.run(app, debug=True, use_reloader=False, allow_unsafe_werkzeug=True, host="192.168.12.18")
