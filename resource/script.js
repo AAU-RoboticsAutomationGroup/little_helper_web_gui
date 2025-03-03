@@ -36,6 +36,9 @@ function onPlanPathClick(){
 function onInitiateClick() {
   socket.emit("init_click")
 }
+function onClearCostmapClick() {
+  socket.emit("clear_costmap")
+}
 
 
 function drawLidar(lidar_points) {
@@ -52,10 +55,10 @@ function drawLidar(lidar_points) {
 // Draw a marker based on type
 function drawMarker(x, y, type) {
     map_ctx.fillStyle = 
-        type === "start" ? "green" : 
+        type === "waypoint" ? "green" : 
         type === "collect" ? "blue" : 
         type === "dropoff" ? "pink" : 
-        type === "end" ? "red" : "black"; // Default color if type is unknown
+        // type === "end" ? "red" : "black"; // Default color if type is unknown
     map_ctx.beginPath();
     map_ctx.arc(x, y, 5, 0, Math.PI * 2);
     map_ctx.fill();
