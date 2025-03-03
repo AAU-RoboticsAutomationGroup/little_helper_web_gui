@@ -105,11 +105,16 @@ class Webui(Node):
         #navigation feedback 
         self.create_subscription(PathStatus, "grasping_path_status", self.grasping_path_status_callback, 10)
       
-        self.arm_base_vel_subscriber = self.create_subscription(TwistStamped, '/vel_arm_base', self.send_arm_vel_callback, 10)
+        self.create_subscription(TwistStamped, 'vel_arm_base', self.send_arm_vel_callback, 10)
+    
     def send_arm_vel_callback(self, msg):
-        dx = msg.twist.linear[0]
-        dy = msg.twist.linear[1]
-        socketio.emit("item_speed",{"dx":dx,"dy":dy})
+        try:
+            dx = round(msg.twist.linear.x, 4)
+            dy = round(msg.twist.linear.y, 4)
+            socketio.emit("item_speed",{"dx":dx,"dy":dy})
+        except Exception as e:
+            self.get_logger().info(f"{e}")
+
 
     def grasping_path_status_callback(self, msg):
         trigger = msg.trigger
