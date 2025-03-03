@@ -47,7 +47,7 @@ function drawLidar(lidar_points) {
 
   for (let i = 0; i < lidar_points.length; i++){
     // console.log("plotting point", lidar_points[i][0], lidar_points[i][1])
-    lidar_ctx.fillRect(lidar_points[i][0], lidar_points[i][1], 5, 5);
+    lidar_ctx.fillRect(lidar_points[i][0] - 1, lidar_points[i][1] - 1, 2, 2);
   }
 }
 
@@ -58,9 +58,9 @@ function drawMarker(x, y, type) {
         type === "waypoint" ? "green" : 
         type === "collect" ? "blue" : 
         type === "dropoff" ? "pink" : 
-        // type === "end" ? "red" : "black"; // Default color if type is unknown
+        type === "end" ? "red" : "black"; // Default color if type is unknown
     map_ctx.beginPath();
-    map_ctx.arc(x, y, 5, 0, Math.PI * 2);
+    map_ctx.arc(x, y, 3, 0, Math.PI * 2);
     map_ctx.fill();
 }
 function drawRobotPose(x, y) {
